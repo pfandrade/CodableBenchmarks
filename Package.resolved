@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "binarycodable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/christophhagen/BinaryCodable",
+      "state" : {
+        "revision" : "4f0cc7314eacbf33361830e631d8c95f53d6af7e",
+        "version" : "1.3.1"
+      }
+    },
+    {
       "identity" : "cborcoding",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SomeRandomiOSDev/CBORCoding.git",

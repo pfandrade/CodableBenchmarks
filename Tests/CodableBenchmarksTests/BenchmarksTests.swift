@@ -1,6 +1,8 @@
 import XCTest
 import Foundation
 import CBORCoding
+import BinaryCodable
+
 @testable import CodableBenchmarks
 
 let count = 10000 // 1, 10, 100, 1000, or 10000
@@ -13,6 +15,8 @@ class BenchmarkTests: XCTestCase {
             XCTPerformanceMetric(rawValue: "com.apple.XCTPerformanceMetric_TransientHeapAllocationsKilobytes")
         ]
     }
+    
+    // MARK: Codable
     
     func testCodableDecoding() {
         self.measure {
@@ -41,6 +45,7 @@ class BenchmarkTests: XCTestCase {
         print(size: data.count, for: "Codable")
     }
     
+    // MARK: JSONSerialization
     func testJSONSerializationDecoding() {
         self.measure {
             let json = try! JSONSerialization.jsonObject(with: data, options: []) as! [[String: Any]]
@@ -63,7 +68,7 @@ class BenchmarkTests: XCTestCase {
         print(size: data.count, for: "JSONSerialization")
     }
     
-    
+    // MARK: CBOR
     func testCBORDecoding() throws {
         let decoder = JSONDecoder()
         let airports = try decoder.decode([Airport].self, from: data)
@@ -95,6 +100,37 @@ class BenchmarkTests: XCTestCase {
         print(size: data.count, for: "Codable")
     }
     
+    // MARK: BinaryCodable
+    
+//    func testBinaryCodableDecoding() throws {
+//        let airports = try JSONDecoder().decode([Airport].self, from: data)
+//        let encoder = BinaryEncoder()
+//        let data = try encoder.encode(airports)
+//        self.measure {
+//            let decoder = BinaryDecoder()
+//            let airports = try! decoder.decode([Airport].self, from: data)
+//            XCTAssertEqual(airports.count, count)
+//        }
+//    }
+    
+    func testBinaryCodableEncoding() throws {
+        let decoder = JSONDecoder()
+        let airports = try decoder.decode([Airport].self, from: data)
+        
+        self.measure {
+            let encoder = BinaryEncoder()
+            let data = try? encoder.encode(airports)
+            XCTAssertNotNil(data)
+        }
+    }
+    
+    func testBinaryCodableSize() throws {
+        let decoder = JSONDecoder()
+        let airports = try decoder.decode([Airport].self, from: data)
+        let encoder = BinaryEncoder()
+        let data = try encoder.encode(airports)
+        print(size: data.count, for: "Codable")
+    }
     private func print(size: Int, for encoderName: String) {
         Swift.print("\(encoderName) size: \(size) bytes (\(ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file)))")
     }
