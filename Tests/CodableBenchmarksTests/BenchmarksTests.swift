@@ -3,6 +3,7 @@ import Foundation
 import CBORCoding
 import BinaryCodable
 import PotentCBOR
+import MessagePacker
 
 @testable import CodableBenchmarks
 
@@ -162,6 +163,38 @@ class BenchmarkTests: XCTestCase {
         let decoder = JSONDecoder()
         let airports = try decoder.decode([Airport].self, from: data)
         let encoder = PotentCBOR.CBOREncoder()
+        let data = try encoder.encode(airports)
+        print(size: data.count, for: "Codable")
+    }
+    
+    // MARK: - MessagePacker
+    func testMessagePackerDecoding() throws {
+        let decoder = JSONDecoder()
+        let airports = try decoder.decode([Airport].self, from: data)
+        let encoder = MessagePackEncoder()
+        let data = try encoder.encode(airports)
+        self.measure {
+            let decoder = MessagePackDecoder()
+            let airports = try! decoder.decode([Airport].self, from: data)
+            XCTAssertEqual(airports.count, count)
+        }
+    }
+    
+    func testMessagePackerEncoding() throws {
+        let decoder = JSONDecoder()
+        let airports = try decoder.decode([Airport].self, from: data)
+
+        self.measure {
+            let encoder = MessagePackEncoder()
+            let data = try? encoder.encode(airports)
+            XCTAssertNotNil(data)
+        }
+    }
+
+    func testPotentMessagePackerSize() throws {
+        let decoder = JSONDecoder()
+        let airports = try decoder.decode([Airport].self, from: data)
+        let encoder = MessagePackEncoder()
         let data = try encoder.encode(airports)
         print(size: data.count, for: "Codable")
     }
