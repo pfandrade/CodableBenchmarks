@@ -2,6 +2,7 @@ import XCTest
 import Foundation
 import CBORCoding
 import BinaryCodable
+import PotentCBOR
 
 @testable import CodableBenchmarks
 
@@ -72,10 +73,10 @@ class BenchmarkTests: XCTestCase {
     func testCBORDecoding() throws {
         let decoder = JSONDecoder()
         let airports = try decoder.decode([Airport].self, from: data)
-        let encoder = CBOREncoder()
+        let encoder = CBORCoding.CBOREncoder()
         let data = try encoder.encode(airports)
         self.measure {
-            let decoder = CBORDecoder()
+            let decoder = CBORCoding.CBORDecoder()
             let airports = try! decoder.decode([Airport].self, from: data)
             XCTAssertEqual(airports.count, count)
         }
@@ -86,7 +87,7 @@ class BenchmarkTests: XCTestCase {
         let airports = try decoder.decode([Airport].self, from: data)
         
         self.measure {
-            let encoder = CBOREncoder()
+            let encoder = CBORCoding.CBOREncoder()
             let data = try? encoder.encode(airports)
             XCTAssertNotNil(data)
         }
@@ -95,7 +96,7 @@ class BenchmarkTests: XCTestCase {
     func testCBORSize() throws {
         let decoder = JSONDecoder()
         let airports = try decoder.decode([Airport].self, from: data)
-        let encoder = CBOREncoder()
+        let encoder = CBORCoding.CBOREncoder()
         let data = try encoder.encode(airports)
         print(size: data.count, for: "Codable")
     }
@@ -131,9 +132,43 @@ class BenchmarkTests: XCTestCase {
         let data = try encoder.encode(airports)
         print(size: data.count, for: "Codable")
     }
+    
+    // MARK: PotentCodables
+    
+    func testPotentCBORDecoding() throws {
+        let decoder = JSONDecoder()
+        let airports = try decoder.decode([Airport].self, from: data)
+        let encoder = PotentCBOR.CBOREncoder()
+        let data = try encoder.encode(airports)
+        self.measure {
+            let decoder = PotentCBOR.CBORDecoder()
+            let airports = try! decoder.decode([Airport].self, from: data)
+            XCTAssertEqual(airports.count, count)
+        }
+    }
+    
+    func testPotentCBOREncoding() throws {
+        let decoder = JSONDecoder()
+        let airports = try decoder.decode([Airport].self, from: data)
+
+        self.measure {
+            let encoder = PotentCBOR.CBOREncoder()
+            let data = try? encoder.encode(airports)
+            XCTAssertNotNil(data)
+        }
+    }
+
+    func testPotentCBORSize() throws {
+        let decoder = JSONDecoder()
+        let airports = try decoder.decode([Airport].self, from: data)
+        let encoder = PotentCBOR.CBOREncoder()
+        let data = try encoder.encode(airports)
+        print(size: data.count, for: "Codable")
+    }
+}
+
+extension BenchmarkTests {
     private func print(size: Int, for encoderName: String) {
         Swift.print("\(encoderName) size: \(size) bytes (\(ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file)))")
     }
-    
-    
 }
