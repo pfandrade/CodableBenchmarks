@@ -4,6 +4,7 @@ import CBORCoding
 import BinaryCodable
 import PotentCBOR
 import MessagePacker
+import BytePacker
 import CodableBenchmarks
 
 let count = 10000 // 1, 10, 100, 1000, or 10000
@@ -13,7 +14,7 @@ class BenchmarkTests: XCTestCase {
     override class var defaultPerformanceMetrics: [XCTPerformanceMetric] {
         return [
             XCTPerformanceMetric(rawValue: "com.apple.XCTPerformanceMetric_WallClockTime"),
-            XCTPerformanceMetric(rawValue: "com.apple.XCTPerformanceMetric_TransientHeapAllocationsKilobytes")
+//            XCTPerformanceMetric(rawValue: "com.apple.XCTPerformanceMetric_TransientHeapAllocationsKilobytes")
         ]
     }
     
@@ -134,6 +135,7 @@ class BenchmarkTests: XCTestCase {
         let airports = try decoder.decode([Airport].self, from: data)
         let encoder = BinaryEncoder()
         let data = try encoder.encode(airports)
+
         print(size: data.count, for: "BinaryCodable")
     }
     
@@ -200,6 +202,38 @@ class BenchmarkTests: XCTestCase {
         let encoder = MessagePackEncoder()
         let data = try encoder.encode(airports)
         print(size: data.count, for: "MessagePacker")
+    }
+    
+    // MARK: BytePacker
+    func testBytePackerDecoding() throws {
+        let decoder = JSONDecoder()
+        let airports = try decoder.decode([Airport].self, from: data)
+        let encoder = BytePacker()
+        let data = try encoder.encode(airports)
+        self.measure {
+            let decoder = ByteUnpacker()
+            let airports = try! decoder.decode([Airport].self, from: data)
+            XCTAssertEqual(airports.count, count)
+        }
+    }
+    
+    func testBytePackerEncoding() throws {
+        let decoder = JSONDecoder()
+        let airports = try decoder.decode([Airport].self, from: data)
+
+        self.measure {
+            let encoder = BytePacker()
+            let data = try? encoder.encode(airports)
+            XCTAssertNotNil(data)
+        }
+    }
+
+    func testBytePackerSize() throws {
+        let decoder = JSONDecoder()
+        let airports = try decoder.decode([Airport].self, from: data)
+        let encoder = BytePacker()
+        let data = try encoder.encode(airports)
+        print(size: data.count, for: "BytePacker")
     }
 }
 
