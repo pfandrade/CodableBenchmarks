@@ -4,8 +4,7 @@ import CBORCoding
 import BinaryCodable
 import PotentCBOR
 import MessagePacker
-
-@testable import CodableBenchmarks
+import CodableBenchmarks
 
 let count = 10000 // 1, 10, 100, 1000, or 10000
 let data = airportsJSON(count: count)
@@ -16,6 +15,10 @@ class BenchmarkTests: XCTestCase {
             XCTPerformanceMetric(rawValue: "com.apple.XCTPerformanceMetric_WallClockTime"),
             XCTPerformanceMetric(rawValue: "com.apple.XCTPerformanceMetric_TransientHeapAllocationsKilobytes")
         ]
+    }
+    
+    override func setUp() {
+        assert(false, "The performance tests aren't being run with optimizations on!")
     }
     
     // MARK: Codable
@@ -99,7 +102,7 @@ class BenchmarkTests: XCTestCase {
         let airports = try decoder.decode([Airport].self, from: data)
         let encoder = CBORCoding.CBOREncoder()
         let data = try encoder.encode(airports)
-        print(size: data.count, for: "Codable")
+        print(size: data.count, for: "CBORCoding")
     }
     
     // MARK: BinaryCodable
@@ -131,7 +134,7 @@ class BenchmarkTests: XCTestCase {
         let airports = try decoder.decode([Airport].self, from: data)
         let encoder = BinaryEncoder()
         let data = try encoder.encode(airports)
-        print(size: data.count, for: "Codable")
+        print(size: data.count, for: "BinaryCodable")
     }
     
     // MARK: PotentCodables
@@ -164,7 +167,7 @@ class BenchmarkTests: XCTestCase {
         let airports = try decoder.decode([Airport].self, from: data)
         let encoder = PotentCBOR.CBOREncoder()
         let data = try encoder.encode(airports)
-        print(size: data.count, for: "Codable")
+        print(size: data.count, for: "PotentCBOR")
     }
     
     // MARK: - MessagePacker
@@ -191,12 +194,12 @@ class BenchmarkTests: XCTestCase {
         }
     }
 
-    func testPotentMessagePackerSize() throws {
+    func testMessagePackerSize() throws {
         let decoder = JSONDecoder()
         let airports = try decoder.decode([Airport].self, from: data)
         let encoder = MessagePackEncoder()
         let data = try encoder.encode(airports)
-        print(size: data.count, for: "Codable")
+        print(size: data.count, for: "MessagePacker")
     }
 }
 
