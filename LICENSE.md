@@ -1,3 +1,4 @@
+Copyright 2023 Paulo Andrade
 Copyright 2018 Read Evaluate Press, LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a
