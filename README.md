@@ -11,6 +11,7 @@ Benchmarked libraries:
 * [BinaryCodable](https://github.com/christophhagen/BinaryCodable)
 * [PotentCodables](https://github.com/outfoxx/PotentCodables/)
 * [MessagePacker](https://github.com/hirotakan/MessagePacker)
+* [Cod](https://github.com/saagarjha/Cod)
 
 Foundation's `JSONSerialization` is also included for comparison.
 
@@ -51,6 +52,7 @@ Test were ran on a 14'inch M1 MacBook Pro.
 | BinaryCodable     	|   0.0034 	|  crashes | 15039 (15 KB) |
 | PotentCBOR        	|   0.0024 	|   0.0027 | 14773 (15 KB) |
 | MessagePacker     	|   0.0014 	|   0.0020 | 14751 (15 KB) |
+| Cod             	|   0.0014 	|   0.0012 | 9857 (10 KB)  |
 |							|				|          |               |
 | JSONSerialization 	|   0.0009 	|   0.0010 | 20492 (20 KB) |
 
@@ -62,6 +64,7 @@ Test were ran on a 14'inch M1 MacBook Pro.
 | BinaryCodable     	|    0.026 	|  crashes | 155401 (155 KB) |
 | PotentCBOR        	|    0.019 	|    0.022 | 152655 (152 KB) |
 | MessagePacker     	|    0.009 	|    0.013 | 152422 (152 KB) |
+| Cod               |    0.013  |    0.008 | 102395 (102 KB) |
 |							|				|          |                 |
 | JSONSerialization 	|    0.006 	|    0.008 | 209877 (210 KB) |
 
@@ -72,7 +75,8 @@ Test were ran on a 14'inch M1 MacBook Pro.
 | BinaryCodable     	|    0.246 	|  crashes | 1549741 (1.5 MB) |
 | PotentCBOR        	|    0.169 	|    0.192 | 1522226 (1.5 MB) |
 | MessagePacker     	|    0.069 	|    0.113 | 1519881 (1.5 MB) |
-|							|				|          |                 |
+| Cod             	|    0.124 	|    0.063 | 1021610 (1.0 MB) |
+|							|				|          |                  |
 | JSONSerialization 	|    0.041 	|    0.063 | 2084963 (2.1 MB) |
 
 

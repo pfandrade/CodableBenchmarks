@@ -5,6 +5,7 @@ import BinaryCodable
 import PotentCBOR
 import MessagePacker
 import CodableBenchmarks
+import Cod
 
 let count = 10000 // 1, 10, 100, 1000, or 10000
 let data = airportsJSON(count: count)
@@ -107,16 +108,16 @@ class BenchmarkTests: XCTestCase {
     
     // MARK: BinaryCodable
     
-//    func testBinaryCodableDecoding() throws {
-//        let airports = try JSONDecoder().decode([Airport].self, from: data)
-//        let encoder = BinaryEncoder()
-//        let data = try encoder.encode(airports)
-//        self.measure {
-//            let decoder = BinaryDecoder()
-//            let airports = try! decoder.decode([Airport].self, from: data)
-//            XCTAssertEqual(airports.count, count)
-//        }
-//    }
+    //    func testBinaryCodableDecoding() throws {
+    //        let airports = try JSONDecoder().decode([Airport].self, from: data)
+    //        let encoder = BinaryEncoder()
+    //        let data = try encoder.encode(airports)
+    //        self.measure {
+    //            let decoder = BinaryDecoder()
+    //            let airports = try! decoder.decode([Airport].self, from: data)
+    //            XCTAssertEqual(airports.count, count)
+    //        }
+    //    }
     
     func testBinaryCodableEncoding() throws {
         let decoder = JSONDecoder()
@@ -154,14 +155,14 @@ class BenchmarkTests: XCTestCase {
     func testPotentCBOREncoding() throws {
         let decoder = JSONDecoder()
         let airports = try decoder.decode([Airport].self, from: data)
-
+        
         self.measure {
             let encoder = PotentCBOR.CBOREncoder()
             let data = try? encoder.encode(airports)
             XCTAssertNotNil(data)
         }
     }
-
+    
     func testPotentCBORSize() throws {
         let decoder = JSONDecoder()
         let airports = try decoder.decode([Airport].self, from: data)
@@ -186,14 +187,14 @@ class BenchmarkTests: XCTestCase {
     func testMessagePackerEncoding() throws {
         let decoder = JSONDecoder()
         let airports = try decoder.decode([Airport].self, from: data)
-
+        
         self.measure {
             let encoder = MessagePackEncoder()
             let data = try? encoder.encode(airports)
             XCTAssertNotNil(data)
         }
     }
-
+    
     func testMessagePackerSize() throws {
         let decoder = JSONDecoder()
         let airports = try decoder.decode([Airport].self, from: data)
@@ -201,6 +202,36 @@ class BenchmarkTests: XCTestCase {
         let data = try encoder.encode(airports)
         print(size: data.count, for: "MessagePacker")
     }
+    
+    // MARK: - Cod
+    func testCodDecoding() throws {
+        let decoder = JSONDecoder()
+        let airports = try decoder.decode([Airport].self, from: data)
+        let encoder = CodEncoder()
+        let data = try encoder.encode(airports)
+        self.measure {
+            let decoder = CodDecoder()
+            let airports = try! decoder.decode([Airport].self, from: data)
+            XCTAssertEqual(airports.count, count)
+        }
+    }
+    func testCodEncoding() throws {
+        let decoder = JSONDecoder()
+        let airports = try decoder.decode([Airport].self, from: data)
+        self.measure {
+            let encoder = CodEncoder()
+            let data = try? encoder.encode(airports)
+            XCTAssertNotNil(data)
+        }
+    }
+    func testCodSize() throws {
+        let decoder = JSONDecoder()
+        let airports = try decoder.decode([Airport].self, from: data)
+        let encoder = CodEncoder()
+        let data = try encoder.encode(airports)
+        print(size: data.count, for: "Cod")
+    }
+    
 }
 
 extension BenchmarkTests {

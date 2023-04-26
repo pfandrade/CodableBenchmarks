@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "cod",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/saagarjha/Cod.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ed60effb25eb65040a6d0d064b2b5d906b336280"
+      }
+    },
+    {
       "identity" : "half",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SomeRandomiOSDev/Half",
